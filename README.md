@@ -328,9 +328,6 @@ cd Airbnb
 npm install
 node app.js
 
-Open the application:
-
-http://localhost:8080
 
 ## Author
 
