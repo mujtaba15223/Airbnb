@@ -79,19 +79,6 @@ Install dependencies:
 
 npm install
 
-## Environment Variables
-
-Create a .env file in the root directory.
-
-Add your credentials:
-
-ATLASDB_URL=your_mongodb_connection_string
-SECRET=your_session_secret
-CLOUD_NAME=your_cloudinary_cloud_name
-CLOUD_API_KEY=your_cloudinary_api_key
-CLOUD_API_SECRET=your_cloudinary_api_secret
-
-Do not commit the .env file or any sensitive credentials to GitHub.
 
 ## MongoDB
 
