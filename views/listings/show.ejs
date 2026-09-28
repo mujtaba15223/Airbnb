@@ -1,0 +1,123 @@
+<% layout("/layouts/boilerplate") %>
+
+  <script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    const coordinates = JSON.parse("<%- JSON.stringify(listing.geometry ? listing.geometry.coordinates : null) %>");
+  </script>
+
+<main class="show-page">
+  <header class="show-header">
+    <div>
+      <p class="show-eyebrow">A place to discover</p>
+      <h1><%= listing.title %></h1>
+      <p class="show-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <%= listing.location %>, <%= listing.country %></p>
+    </div>
+    <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+      <div class="show-actions" role="group" aria-label="Manage this stay">
+        <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-dark"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Edit stay</a>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+          <button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can" aria-hidden="true"></i> Remove stay</button>
+        </form>
+      </div>
+    <% } %>
+  </header>
+
+  <section class="show-hero" aria-label="Listing details">
+    <img src="<%= listing.image.url %>" class="show-img" alt="<%= listing.title %>">
+    <div class="show-summary">
+      <p class="show-price-label">Price per night</p>
+      <p class="show-price">&#8377;<%= listing.price.toLocaleString("en-IN") %><span> / night</span></p>
+      <div class="show-divider"></div>
+      <h2>About this place</h2>
+      <% const descriptionParagraphs = String(listing.description || "").split(/\r?\n\s*\r?\n/).filter((paragraph) => paragraph.trim()); %>
+      <div class="show-description">
+        <% for (const paragraph of descriptionParagraphs) { %>
+          <p><%= paragraph.trim() %></p>
+        <% } %>
+      </div>
+      <div class="show-host">
+        <span class="host-avatar" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+        <span><small>Hosted by</small><strong><%= listing.owner.username %></strong></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="show-section">
+    <% if(currUser && !listing.owner._id.equals(currUser._id)) { %>
+      <div class="review-form-section">
+        <h2>Share your experience</h2>
+        <p class="section-intro">How was this place? Leave a rating and a helpful note for other visitors.</p>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+          <div class="mb-3">
+            <label for="rating" class="form-label">Your rating</label>
+            <fieldset id="rating" class="starability-slot" aria-label="Choose a rating from 1 to 5 stars">
+              <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="form-label">Your review</label>
+            <textarea name="review[comment]" id="comment" rows="4" class="form-control" placeholder="What should other visitors know?" required></textarea>
+            <div class="invalid-feedback">Please add a comment to your review.</div>
+          </div>
+          <button class="btn btn-dark">Post review</button>
+        </form>
+      </div>
+    <% } %>
+
+    <div class="reviews-section">
+      <div class="section-heading">
+        <div>
+          <p class="show-eyebrow">Visitor feedback</p>
+          <h2>Reviews <span class="review-count">(<%= listing.reviews.length %>)</span></h2>
+        </div>
+      </div>
+      <% if(listing.reviews.length > 0) { %>
+        <div class="row g-3">
+          <% for (let review of listing.reviews) { %>
+            <div class="col-12 col-md-6">
+              <article class="card review-card h-100">
+                <div class="card-body">
+                  <h3 class="card-title"><i class="fa-regular fa-circle-user" aria-hidden="true"></i> <%= review.author.username %></h3>
+                  <p class="starability-result card-text" data-rating="<%= review.rating %>" aria-label="Rated <%= review.rating %> out of 5 stars"></p>
+                  <p class="card-text review-comment"><%= review.comment %></p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                  <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="mb-0">
+                    <button class="btn btn-sm btn-outline-secondary">Delete review</button>
+                  </form>
+                </div>
+              </article>
+            </div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <p class="empty-reviews">No reviews yet. Be the first to share what you think.</p>
+      <% } %>
+    </div>
+  </section>
+
+  <% if (listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2) { %>
+    <section class="show-section location-section">
+      <p class="show-eyebrow">Find your way</p>
+      <h2>Explore the location</h2>
+      <p class="section-intro"><%= listing.location %>, <%= listing.country %></p>
+      <div id="map" data-title="<%= listing.title %>" data-location="<%= listing.location %>"></div>
+    </section>
+  <% } %>
+</main>
+
+<% if (listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2) { %>
+<script src="/js/map.js"></script>
+<% } %>
+
+

@@ -1,0 +1,64 @@
+
+<%
+const footerCategories = [
+    { id: "popular", name: "Popular", destinations: ["Malibu", "New York City", "Aspen", "Florence", "Portland", "Cancun", "Lake Tahoe", "Los Angeles", "Amsterdam", "Boston", "Bali", "Banff", "Miami"] },
+    { id: "arts", name: "Arts & culture", destinations: ["Florence", "Amsterdam", "Boston", "New York City", "Tokyo", "Charleston", "Los Angeles", "Miami", "Dubai"] },
+    { id: "beach", name: "Beach", destinations: ["Malibu", "Cancun", "Bali", "Costa Rica", "Maldives", "Fiji", "Mykonos", "Phuket"] },
+    { id: "mountains", name: "Mountains", destinations: ["Aspen", "Banff", "Verbier", "Scottish Highlands", "Lake Tahoe", "Montana", "New Hampshire"] },
+    { id: "outdoors", name: "Outdoors", destinations: ["Serengeti National Park", "Banff", "Lake Tahoe", "Costa Rica", "Montana", "Portland", "Scottish Highlands", "Aspen", "New Hampshire"] },
+    { id: "activities", name: "Things to do", destinations: ["New York City", "Florence", "Amsterdam", "Tokyo", "Dubai", "Los Angeles", "Boston", "Miami", "Charleston"] },
+];
+const footerVisibleDestinations = 6;
+%>
+<footer id="footer">
+    <section class="footer-discovery" aria-labelledby="footer-inspiration-title">
+        <div class="footer-discovery-inner">
+            <h2 id="footer-inspiration-title">Inspiration for future getaways</h2>
+            <div class="footer-tabs" role="tablist" aria-label="Browse stays by interest">
+                <% footerCategories.forEach((category, index) => { %>
+                    <button class="footer-tab<%= index === 0 ? ' is-active' : '' %>" id="footer-tab-<%= category.id %>" type="button" role="tab" aria-controls="footer-panel-<%= category.id %>" aria-selected="<%= index === 0 %>" tabindex="<%= index === 0 ? 0 : -1 %>" data-footer-tab="<%= category.id %>"><%= category.name %></button>
+                <% }) %>
+            </div>
+            <div class="footer-panels">
+                <% footerCategories.forEach((category, index) => { %>
+                    <section class="footer-panel" id="footer-panel-<%= category.id %>" role="tabpanel" aria-labelledby="footer-tab-<%= category.id %>" tabindex="0" data-footer-panel="<%= category.id %>" <%= index === 0 ? '' : 'hidden' %>>
+                        <div class="footer-destination-grid">
+                            <% category.destinations.slice(0, footerVisibleDestinations).forEach((destination) => { %>
+                                <a class="footer-destination" href="/listings?search=<%= encodeURIComponent(destination) %>">
+                                    <span class="footer-destination-name"><%= destination %></span>
+                                    <span class="footer-destination-type">Explore stays</span>
+                                </a>
+                            <% }) %>
+                            <% if (category.destinations.length > footerVisibleDestinations) { %>
+                                <div class="footer-destination-extra" id="footer-extra-<%= category.id %>" data-footer-extra hidden>
+                                    <% category.destinations.slice(footerVisibleDestinations).forEach((destination) => { %>
+                                        <a class="footer-destination" href="/listings?search=<%= encodeURIComponent(destination) %>">
+                                            <span class="footer-destination-name"><%= destination %></span>
+                                            <span class="footer-destination-type">Explore stays</span>
+                                        </a>
+                                    <% }) %>
+                                </div>
+                                <button class="footer-more" type="button" aria-controls="footer-extra-<%= category.id %>" aria-expanded="false" data-footer-more>
+                                    <span data-footer-more-label>Show more</span>
+                                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                                </button>
+                            <% } %>
+                        </div>
+                    </section>
+                <% }) %>
+            </div>
+        </div>
+    </section>
+    <div class="footer-information">
+        <div class="f-info-socials">
+            <a class="social-facebook" href="https://www.facebook.com/airbnb" aria-label="Airbnb on Facebook"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i></a>
+            <a class="social-instagram" href="https://www.instagram.com/airbnb/" aria-label="Airbnb on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a class="social-linkedin" href="https://www.linkedin.com/company/airbnb/" aria-label="Airbnb on LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+        </div>
+        <div class="f-info-brand">&copy; Airbnb private limited</div>
+        <div class="f-info-links">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,180 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  #filters{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    cursor: pointer;
+  }
+  .filter-strip{
+    display: flex;
+    flex: 1 1 72%;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .category-scroller{
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+  }
+  .category-scroller::-webkit-scrollbar{ display: none; }
+  .category-list{
+    display: flex;
+    width: max-content;
+    gap: 0.75rem;
+  }
+  .filter-arrow{
+    flex: 0 0 2.25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid #adb5bd;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .filter{
+    flex: 0 0 5rem;
+    text-align: center;
+    margin-top: 1rem;
+    opacity: 0.7;
+  }
+  .filter:hover{
+    opacity: 1;
+  }
+  .filter p{
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .tax-toggle{
+    flex: 0 0 auto;
+    padding-left: 1rem;
+    border-left: 1px solid #dee2e6;
+    white-space: nowrap;
+  }
+  @media (max-width: 575px){
+    #filters{ gap: 0.5rem; }
+    .filter-strip{ gap: 0.25rem; }
+    .filter-arrow{ flex-basis: 1.9rem; width: 1.9rem; height: 1.9rem; }
+    .tax-toggle{ padding-left: 0.5rem; }
+  }
+
+  .tax-info{
+    margin-left: 0.35rem;
+    color: #495057;
+    font-size: 0.85rem;
+  }
+  .tax-toggle{
+    border: 1px solid black;
+    border-radius: 1rem;
+    height: 3rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    
+  }
+</style>
+<body>
+<!--<h3>All Listings</h3>-->
+<div id="filters">
+  <div class="filter-strip">
+    <button class="filter-arrow" id="filters-back" type="button" aria-label="Show previous filters" title="Show previous filters">
+      <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+    </button>
+    <div class="category-scroller" id="category-scroller">
+      <div class="category-list">
+        <div class="filter"><div><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
+        <div class="filter"><div><i class="fa-solid fa-bed"></i></div><p>Rooms</p></div>
+        <div class="filter"><div><i class="fa-solid fa-city"></i></div><p>Iconic cities</p></div>
+        <div class="filter"><div><i class="fa-solid fa-mountain"></i></div><p>Mountains</p></div>
+        <div class="filter"><div><i class="fa-brands fa-fort-awesome"></i></div><p>Castles</p></div>
+        <div class="filter"><div><i class="fa-solid fa-person-swimming"></i></div><p>Amazing pools</p></div>
+        <div class="filter"><div><i class="fa-solid fa-tent"></i></div><p>Campinge</p></div>
+        <div class="filter"><div><i class="fa-solid fa-tractor"></i></div><p>Farms</p></div>
+        <div class="filter"><div><i class="fa-solid fa-person-skiing"></i></div><p>Arctic</p></div>
+        <div class="filter"><div><i class="fa-solid fa-umbrella-beach"></i></div><p>Beach</p></div>
+        <div class="filter"><div><i class="fa-regular fa-face-grin-stars"></i></div><p>OMG!</p></div>
+        <div class="filter"><div><i class="fa-solid fa-binoculars"></i></div><p>Amazing views</p></div>
+        <div class="filter"><div><i class="fa-solid fa-cable-car"></i></div><p>Cabins</p></div>
+        <div class="filter"><div><i class="fa-solid fa-water"></i></div><p>Lake front</p></div>
+        <div class="filter"><div><i class="fa-solid fa-hotel"></i></div><p>Hotels</p></div>
+        <div class="filter"><div><i class="fa-solid fa-utensils"></i></div><p>Dinner</p></div>
+        <div class="filter"><div><i class="fa-brands fa-uncharted"></i></div><p>hunting</p></div>
+        <div class="filter"><div><i class="fa-solid fa-mug-saucer"></i></div><p>Break fast</p></div>
+
+      </div>
+    </div>
+    <button class="filter-arrow" id="filters-next" type="button" aria-label="Show more filters" title="Show more filters">
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="tax-toggle">
+    <div class="form-check-reverse form-switch" id="flexcheckdefault">
+      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+      <label class="form-check-label" for="switchCheckDefault" title="Display total before taxes">Display total after Taxes</label>
+    </div>
+  </div>
+</div>
+
+<script>
+  const categoryScroller = document.getElementById("category-scroller");
+  document.getElementById("filters-next").addEventListener("click", () => {
+    categoryScroller.scrollBy({ left: categoryScroller.clientWidth * 0.75, behavior: "smooth" });
+  });
+  document.getElementById("filters-back").addEventListener("click", () => {
+    categoryScroller.scrollBy({ left: -categoryScroller.clientWidth * 0.75, behavior: "smooth" });
+  });
+
+  const taxSwitch = document.getElementById("switchCheckDefault");
+  const priceFormatter = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 });
+
+  taxSwitch.addEventListener("change", () => {
+    const includeTax = taxSwitch.checked;
+    document.querySelectorAll(".listing-price").forEach((price) => {
+      const basePrice = Number(price.dataset.basePrice);
+      price.textContent = priceFormatter.format(includeTax ? basePrice * 1.18 : basePrice);
+    });
+    document.querySelectorAll(".tax-info").forEach((info) => {
+      info.hidden = !includeTax;
+    });
+  })
+</script>
+  <% if (category === "experiences" || category === "services") { %>
+    <div class="alert alert-light border mt-4" role="status">
+      <h2 class="h5"><%= category === "experiences" ? "Experiences" : "Services" %> are coming soon</h2>
+      <p class="mb-2">This site currently has homes to explore.</p>
+      <a href="/listings?type=homes">Browse homes</a>
+    </div>
+  <% } %>
+  <% if (searchTerm) { %>
+    <% if (allListings.length > 0) { %>
+      <div class="mt-4 mb-2" role="status">
+        <h2 class="h5 mb-1">Search results</h2>
+        <p class="text-muted mb-0">Found <%= allListings.length %> <%= allListings.length === 1 ? 'stay' : 'stays' %> for “<%= searchTerm %>”.</p>
+      </div>
+    <% } else { %>
+      <div class="alert alert-light border mt-4" role="status">
+        <h2 class="h5">No stays found for “<%= searchTerm %>”</h2>
+        <p class="mb-2">Try another place name, city, or country.</p>
+        <a href="/listings">Browse all stays</a>
+      </div>
+    <% } %>
+  <% } %>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for (let listing of allListings) { %>
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card col listing-card">
+          <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br/>
+              &#8377 <span class="listing-price" data-base-price="<%= Number(listing.price) %>"><%= Number(listing.price).toLocaleString("en-IN") %></span>/night
+              <span class="tax-info" hidden>Includes 18% GST</span>
+            </p>
+          </div>
+        </div>
+      </a>
+    <% } %>
+  </div>

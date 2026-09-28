@@ -1,0 +1,83 @@
+<style>
+  .btn-search{
+    background-color: #fe424d;
+    border-radius: 25px;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    padding: 0 1rem 0 1rem;
+  }
+  .btn-search:hover {
+    background-color: #fe424d;
+    color: #fff;
+  }
+  .btn-search i{
+    display: inline-block;
+  }
+  .search-input{
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+    font-size: 1rem;
+  }
+</style>
+
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings" aria-label="Airbnb home"><i class="fa-brands fa-airbnb" aria-hidden="true"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+  <div class="navbar-nav">
+
+          <a class="nav-link" href="/listings">Explore</a>
+
+          </div>
+          <div class="navbar-nav ms-auto">
+                <form class="d-flex" role="search" action="/listings" method="GET">
+              <label class="visually-hidden" for="listing-search">Search listing names, destinations, and countries</label>
+              <input class="form-control me-2 search-input" id="listing-search" name="search" type="search" placeholder="Search places or stays" aria-label="Search listing names, destinations, and countries" value="<%= typeof searchTerm !== 'undefined' ? searchTerm : '' %>"/>
+        <button class="btn btn-search" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          Search</button>
+      </form>
+          </div>
+           <div class="navbar-nav ms-auto">
+            <a class="nav-link host-link" href="/listings/new"><i class="fa-solid fa-user" aria-hidden="true"></i> Become a Host</a>
+            <% if(!currUser){ %>
+          <a class="nav-link" aria-current="page" href="/signup"><b>Sign up</b></a>
+
+          <a class="nav-link" href="/login"><b>login</b></a>
+          <% } %>
+           <% if(currUser){ %>
+          <a class="nav-link" href="/logout"><b>logout</b></a> 
+            <% } %>
+          </div>
+    </div>
+  </div>
+</nav>
+
+<% const selectedStayType = typeof category !== "undefined" ? category : "all"; %>
+<nav class="stay-type-nav" aria-label="Explore categories">
+   <div class="stay-type-list">
+    <a class="stay-type-tab<%= selectedStayType === 'all' ? ' is-active' : '' %>" href="/listings?type=all" <%= selectedStayType === 'all' ? 'aria-current="page"' : '' %>>
+      <span class="stay-type-icon" aria-hidden="true">🌍</span>
+      <span>All</span>
+    </a>
+    <a class="stay-type-tab<%= selectedStayType === 'homes' ? ' is-active' : '' %>" href="/listings?type=homes" <%= selectedStayType === 'homes' ? 'aria-current="page"' : '' %>>
+      <span class="stay-type-icon" aria-hidden="true">🏠</span>
+      <span>Homes</span>
+    </a>
+    <a class="stay-type-tab<%= selectedStayType === 'experiences' ? ' is-active' : '' %>" href="/listings?type=experiences" <%= selectedStayType === 'experiences' ? 'aria-current="page"' : '' %>>
+      <span class="stay-type-icon" aria-hidden="true">🎈</span>
+      <span>Experiences</span>
+    </a>
+    <a class="stay-type-tab<%= selectedStayType === 'services' ? ' is-active' : '' %>" href="/listings?type=services" <%= selectedStayType === 'services' ? 'aria-current="page"' : '' %>>
+      <span class="stay-type-icon" aria-hidden="true">🛎️</span>
+      <span>Services</span>
+    </a>
+  </div>
+</nav>
