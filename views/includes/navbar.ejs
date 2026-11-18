@@ -7,7 +7,7 @@
     align-items: center;
     gap: 0.5rem;
     white-space: nowrap;
-    padding: 0 1rem 0 1rem;
+    padding: 0.5rem 1rem;
   }
   .btn-search:hover {
     background-color: #fe424d;
@@ -18,44 +18,44 @@
   }
   .search-input{
     border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
+    min-width: 0;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
   }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/listings" aria-label="Airbnb home"><i class="fa-brands fa-airbnb" aria-hidden="true"></i></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-
-  <div class="navbar-nav">
-
-          <a class="nav-link" href="/listings">Explore</a>
-
-          </div>
-          <div class="navbar-nav ms-auto">
-                <form class="d-flex" role="search" action="/listings" method="GET">
-              <label class="visually-hidden" for="listing-search">Search listing names, destinations, and countries</label>
-              <input class="form-control me-2 search-input" id="listing-search" name="search" type="search" placeholder="Search places or stays" aria-label="Search listing names, destinations, and countries" value="<%= typeof searchTerm !== 'undefined' ? searchTerm : '' %>"/>
+      <div class="navbar-nav me-lg-auto">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+      <form class="d-flex nav-search-form" role="search" action="/listings" method="GET">
+        <label class="visually-hidden" for="listing-search">Search listing names, destinations, and countries</label>
+        <input class="form-control me-2 search-input" id="listing-search" name="search" type="search" placeholder="Search places or stays" aria-label="Search listing names, destinations, and countries" value="<%= typeof searchTerm !== 'undefined' ? searchTerm : '' %>"/>
         <button class="btn btn-search" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
-          Search</button>
+          Search
+        </button>
       </form>
-          </div>
-           <div class="navbar-nav ms-auto">
-            <a class="nav-link host-link" href="/listings/new"><i class="fa-solid fa-user" aria-hidden="true"></i> Become a Host</a>
-            <% if(!currUser){ %>
-          <a class="nav-link" aria-current="page" href="/signup"><b>Sign up</b></a>
-
-          <a class="nav-link" href="/login"><b>login</b></a>
-          <% } %>
-           <% if(currUser){ %>
-          <a class="nav-link" href="/logout"><b>logout</b></a> 
-            <% } %>
-          </div>
+      <div class="navbar-nav nav-actions">
+        <button class="nav-link theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+          <span data-theme-label>Dark mode</span>
+        </button>
+        <a class="nav-link host-link" href="/listings/new"><i class="fa-solid fa-user" aria-hidden="true"></i> Become a Host</a>
+        <% if(!currUser){ %>
+          <a class="nav-link" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Login</b></a>
+        <% } %>
+        <% if(currUser){ %>
+          <a class="nav-link" href="/logout"><b>Logout</b></a>
+        <% } %>
+      </div>
     </div>
   </div>
 </nav>

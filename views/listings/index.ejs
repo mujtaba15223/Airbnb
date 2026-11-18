@@ -5,7 +5,7 @@
     align-items: center;
     gap: 1rem;
     width: 100%;
-    cursor: pointer;
+    cursor: default;
   }
   .filter-strip{
     display: flex;
@@ -73,7 +73,33 @@
     padding: 1rem;
     display: flex;
     align-items: center;
-    
+  }
+  @media (max-width: 767px){
+    #filters{
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .filter-strip{
+      flex: 0 0 auto;
+      width: 100%;
+    }
+    .tax-toggle{
+      justify-content: center;
+      height: auto;
+      min-height: 2.75rem;
+      padding: 0.5rem 0.75rem;
+      border-left: 1px solid #dee2e6;
+    }
+    .tax-toggle .form-check-reverse{
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+    }
+    .tax-toggle .form-check-input{
+      margin: 0;
+    }
   }
 </style>
 <body>

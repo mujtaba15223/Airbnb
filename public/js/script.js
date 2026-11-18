@@ -19,6 +19,32 @@
 })();
 
 (() => {
+  const toggle = document.querySelector("[data-theme-toggle]")
+  if (!toggle) return
+
+  const icon = toggle.querySelector("i")
+  const label = toggle.querySelector("[data-theme-label]")
+
+  const updateToggle = (theme) => {
+    const isDark = theme === "dark"
+    icon.classList.toggle("fa-moon", !isDark)
+    icon.classList.toggle("fa-sun", isDark)
+    label.textContent = isDark ? "Light mode" : "Dark mode"
+    toggle.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} mode`)
+  }
+
+  updateToggle(document.documentElement.dataset.theme)
+
+  toggle.addEventListener("click", () => {
+    const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+    document.documentElement.dataset.theme = theme
+    document.documentElement.dataset.bsTheme = theme
+    localStorage.setItem("airbnb-theme", theme)
+    updateToggle(theme)
+  })
+})();
+
+(() => {
   const footer = document.querySelector(".footer-discovery")
   if (!footer) return
 
